@@ -1,0 +1,10 @@
+development:
+  adapter: sqlite3
+  database: database.sqlite3
+  
+production:
+  adapter: postgresql
+  database: 'mydb'
+  username: 'postgres'
+  password: 'postgres'
+  host: localhost
