@@ -28,7 +28,7 @@ post '/send' do
   
   if record.save
     pusher_client.trigger('test_channel', 'my_event', message_fields)
-    redirect '/getMessage'
+    redirect '/showGraph'
   else
     raise "Error occured while saving record"
     pust "Error occured while saving record"

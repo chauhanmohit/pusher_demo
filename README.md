@@ -15,6 +15,7 @@ Things you may want to cover:
 
 * This will launch the Ruby sinatra app at port number 9292
 
+* The open http://localhost:9292 in any of desired 
 
 ......
 
@@ -27,7 +28,6 @@ Things you may want to cover:
 * Pusher
 
 * AngularJs
-
 
 
 Thanks

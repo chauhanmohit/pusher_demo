@@ -1,1 +1,1 @@
-var app = angular.module('PusherApp',['ngAnimate','toastr']);
+var app = angular.module('PusherApp',['ngAnimate','toastr','underscore','d3']);

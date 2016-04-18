@@ -22,3 +22,34 @@
     padding: 0;
     text-align: center;
 }
+
+/**
+ *  D3 graph section css from here
+ **/
+.svg-container {
+    display: inline-block;
+    position: relative;
+    vertical-align: top;
+    overflow: hidden;
+}
+.svg-content-responsive {
+    display: inline-block;
+    top: 10px;
+    left: 0;
+}
+.link {
+    fill: none;
+    stroke: #3c753b;
+    stroke-width: 1.5px;
+}
+
+#chart {
+    margin: 0 auto;
+    width: 65%;
+}
+
+
+svg {
+    border: 1px solid #000;
+    margin: 28px;
+}
