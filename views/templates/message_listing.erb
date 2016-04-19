@@ -10,29 +10,29 @@
         <table class="table table-striped">
           <thead>
           <tr>
-            <th>Email</th>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Level</th>
             <th>From</th>
             <th>To</th>
-            <th>Title</th>
-            <th>Message</th>
           </tr>
           </thead>
           <tbody>
             <tr ng-repeat="message in messages">
-                <td>{{ message.email }}</td>
+                <td>{{ message.nodeid }}</td>
+                <td>{{ message.name }}</td>
+                <td>{{ message.level }}</td>
                 <td>{{ message.from }}</td>
                 <td>{{ message.to }}</td>
-                <td>{{ message.title }}</td>
-                <td>{{ message.message }}</td>
             </tr>
             
             <% @info.each do |d| %>
             <tr>
-                <td><%= d.email %></td>
+                <td><%= d.nodeid %></td>
+                <td><%= d.name %></td>
+                <td><%= d.level %></td>
                 <td><%= d.from %></td>
                 <td><%= d.to %></td>
-                <td><%= d.title %></td>
-                <td><%= d.message %></td>
             </tr>
             <% end %>
             
@@ -42,7 +42,7 @@
       </div>
       <div class="col-md-2">
         <div class="gap"></div>
-        <a href="/" class="btn btn-success">Send Message</a>
+        <a href="/" class="btn btn-success">Add Node</a>
       </div>
     </div>
 </section>

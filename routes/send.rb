@@ -12,23 +12,23 @@ post '/send' do
  
   message_fields = Hash.new('message_fields')
   message_fields = {
-    "email" => params['email'],
-    "from" => params['from'],
-    "to" => params['to'],
-    "title" => params['title'],
-    "message" => params['body']
+    "nodeId" => params['id'],
+    "nodeName" => params['name'],
+    "nodeLevel" => params['level'],
+    "connectionFrom" => params['from'],
+    "connectionTo" => params['to']
   }
   
   record = Records.new()
-  record.email = params['email']
+  record.nodeid = params['id']
+  record.name = params['name']
+  record.level = params['level']
   record.from = params['from']
   record.to = params['to']
-  record.title = params['title']
-  record.message = params['body']
   
   if record.save
     pusher_client.trigger('test_channel', 'my_event', message_fields)
-    redirect '/showGraph'
+    redirect '/getMessage'
   else
     raise "Error occured while saving record"
     pust "Error occured while saving record"

@@ -6,25 +6,35 @@
           <div class="outtersection">
             <form class="form-horizontal" method="post" role="form" action="/send">
               <div class="form-group">
-               <p>Send message</p>
+               <p>Add graph node</p>
+              </div>
+               <div class="form-group">
+                <input type="text" class="form-control" placeholder="Node Id" id="id" name="id" required />
               </div>
               <div class="form-group">
-                <input type="email" class="form-control" placeholder="Email address" id="email" name="email" required />
+                <input type="text" class="form-control" placeholder="Name" id="name" name="name" required />
               </div>
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Send From" id="from" name="from" />
+                <label>Level</label> :
+                <select name="level">
+                    <option value="1">Level 1</option>
+                    <option value="2">Level 2</option>
+                    <option value="3">Level 3</option>
+                    <option value="4">Level 4</option>
+                </select>
               </div>
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Send To" id="to" name="to" />
+               <p>Add connections for node</p>
               </div>
               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Message Title" id="title" name="title" required />
+                <input type="text" class="form-control" placeholder="From" id="from" name="from" />
               </div>
               <div class="form-group">
-                <textarea class="form-control" name="body" cols="30" rows="10" required >Message Body</textarea>
+                <input type="text" class="form-control" placeholder="To" id="to" name="to"  />
               </div>
+              
               <button type="submit" class="btn btn-primary">Send</button>
-              <a href="/getMessage" class="btn btn-warning">Messages</a>
+              <a href="/showGraph" class="btn btn-warning">Graph</a>
             </form>
           </div>
         </div>

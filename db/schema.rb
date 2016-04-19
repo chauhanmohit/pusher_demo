@@ -14,11 +14,11 @@
 ActiveRecord::Schema.define(version: 20160415054316) do
 
   create_table "records", force: :cascade do |t|
-    t.string   "email"
+    t.string   "nodeid"
+    t.string   "name"
+    t.string   "level"
     t.string   "from"
     t.string   "to"
-    t.string   "title"
-    t.text     "message"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

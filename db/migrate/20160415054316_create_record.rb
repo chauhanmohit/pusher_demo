@@ -1,11 +1,11 @@
 class CreateRecord < ActiveRecord::Migration
   def change
     create_table :records do |t|
-      t.string :email
+      t.string :nodeid
+      t.string :name
+      t.string :level
       t.string :from
       t.string :to
-      t.string :title
-      t.text   :message
       t.timestamps null: false
     end
   end
