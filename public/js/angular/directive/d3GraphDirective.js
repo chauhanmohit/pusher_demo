@@ -27,7 +27,7 @@
                                             .attr("viewBox", "0 0 795 394")
                                             .classed("svg-content-responsive", true)
                                             .append("g");
-                        
+
                         data.forEach(function(d,i){
                             nodes = _.chain(d.Components)
                                 .groupBy("Level")
@@ -67,7 +67,6 @@
                                 .value();
                         });
                         
-                        
                         nodes.forEach(function(d,i){
                             var rootName = d.children[0].Name ? d.children[0].Name : 'Not defined';
                             var k = parseInt(i + 1);
@@ -95,6 +94,16 @@
                                         .style("fill", "none")
                                         .style("stroke-width", 2);
                 
+                                    //appending names in the rectangle of child nodes
+                                    svgContainer.append('foreignObject')
+                                            .attr('x', 12 + (3*i*70))
+                                            .attr('y', 12 + parseInt( (150*(index))/1.5 ) )
+                                            .attr('class', "text_name_"+value.ID)
+                                            .attr('width', parseInt(rwidth) )
+                                            .attr('height', parseInt(rheight) )
+                                            .append("xhtml:body")
+                                            .html(value.Name);
+                                            
                                     //appending circles to the child node at the start of rectangle
                                     svgContainer.append("circle")
                                         .attr("cx", 10 + (3*i*70))
@@ -108,16 +117,6 @@
                                         .attr("cy", 10 + parseInt( (150*(index ))/1.5 ) + 37 )
                                         .attr("r",4)
                                         .style("fill","#3c753b");
-                
-                                    //appending names in the rectangle of child nodes
-                                    svgContainer.append('foreignObject')
-                                            .attr('x', 16 + (3*i*70))
-                                            .attr('y', 16 + parseInt( (150*(index))/1.5 ) )
-                                            .attr('class', value.Name)
-                                            .attr('width', parseInt(rwidth - 10) )
-                                            .attr('height', parseInt(rheight - 10) )
-                                            .append("xhtml:body")
-                                            .html(value.Name);
                                 });
                         });
                         
@@ -145,8 +144,6 @@
                         });
                         
                         function calculatePostionX1(x , level, childCount) {
-                            console.log("level count", level);
-                            //console.log("x and level", x ,level, childCount);
                             switch ( parseInt(level) ) {
                                 case 1 :
                                     return parseInt(parseInt(x) + parseInt(rwidth) ) ;
@@ -220,6 +217,13 @@
                             scope.render(scope.data);    
                         }
                     });
+                    
+                    scope.$watchCollection('data[0].Connections', function(n,o){
+                        if (n) {
+                            scope.render(scope.data);    
+                        }
+                    });
+
                 });
             }
         }

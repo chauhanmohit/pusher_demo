@@ -1,5 +1,56 @@
 <div ng-controller="graphController">
-  <center><h1>D3 Graph section</h1></center>
+  <div class="col-lg-9">
+    <center><h1>System Graph</h1></center>
     <div id="chart"></div>
-    <system-graph data='serverData'></system-graph>  
+    <system-graph data='serverData'></system-graph>    
+  </div>
+  <div class="col-lg-3">
+    <div class="gap_up"></div>
+    <center><h1>Configuration</h1></center>
+     <div class="gap_below"></div>
+      <div class="outtersection">
+        <div class="col-md-12">
+          <textarea rows="8" cols="30" class="loadContent"> {{ loadedContent }} </textarea>
+        </div>
+        <div class="col-md-12"><br/>
+          <button class="btn btn-warning">Load graph</button>
+        </div>
+        <div class="gap_below"></div>
+        <div class="col-md-12">
+            <div class="form-group">
+              <br/>
+              <p>Change node name</p>
+            </div>
+             <div class="form-group">
+              <input type="text" class="form-control" placeholder="Node Id" id="id" required />
+            </div>
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Name" id="name" required />
+            </div>
+            <button type="button" class="btn btn-primary" id="changeName">Change</button>
+        </div>
+      </div>
+  </div>
+  
 </div>
+
+<script type="text/javascript">
+  (function($){
+    $(document).ready(function(){
+      
+      $('#changeName').click(function(){
+        var id = $('#id').val();
+        var name = $('#name').val();
+        var element = $('.text_name_'+id + ' > body')
+        if (element !== undefined) {
+          var element = $('.text_name_'+id + ' > body').text(name);
+          id.val('');
+          name.val('');
+        }else{
+          alert("error occured");
+        }
+        console.log("elemt", element);
+      });
+    });
+  }($));
+</script>

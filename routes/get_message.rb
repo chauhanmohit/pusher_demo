@@ -2,6 +2,8 @@
 
 #getMessage route
 get '/getMessage' do
-  @info = Records.order("created_at DESC")
+  @node_info = Nodes.order("created_at DESC")
+  @conn_info = Connections.order("created_at DESC")
   erb :'templates/message_listing'
+  
 end

@@ -6,38 +6,63 @@
         <div class="form-group">
              <p>Records Listing...</p>
         </div>
-        <div class="table-responsive">
-        <table class="table table-striped">
-          <thead>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Level</th>
-            <th>From</th>
-            <th>To</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr ng-repeat="message in messages">
-                <td>{{ message.nodeid }}</td>
-                <td>{{ message.name }}</td>
-                <td>{{ message.level }}</td>
-                <td>{{ message.from }}</td>
-                <td>{{ message.to }}</td>
-            </tr>
-            
-            <% @info.each do |d| %>
-            <tr>
-                <td><%= d.nodeid %></td>
-                <td><%= d.name %></td>
-                <td><%= d.level %></td>
-                <td><%= d.from %></td>
-                <td><%= d.to %></td>
-            </tr>
-            <% end %>
-            
-          </tbody>
-        </table>
+        <div class="col-lg-6">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th>Id</th>
+                      <th>Name</th>
+                      <th>Level</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="message in messages">
+                        <td>{{ message.nodeid }}</td>
+                        <td>{{ message.name }}</td>
+                        <td>{{ message.level }}</td>
+                    </tr>
+                    
+                    <% @node_info.each do |d| %>
+                    <tr>
+                        <td><%= d.nodeid %></td>
+                        <td><%= d.name %></td>
+                        <td><%= d.level %></td>
+                    </tr>
+                    <% end %>
+                    
+                  </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                  <thead>
+                  <tr>
+                    <th>Id</th>
+                    <th>From</th>
+                    <th>To</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="message in messages">
+                        <td>{{ message.nodeid }}</td>
+                        <td>{{ message.name }}</td>
+                        <td>{{ message.level }}</td>
+                    </tr>
+                    
+                    <% @conn_info.each do |d| %>
+                    <tr>
+                        <td><%= d.id %></td>
+                        <td><%= d.from %></td>
+                        <td><%= d.to %></td>
+                    </tr>
+                    <% end %>
+                    
+                  </tbody>
+                </table>
+            </div>
         </div>
       </div>
       <div class="col-md-2">

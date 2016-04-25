@@ -2,10 +2,22 @@
     height: 50px;
     width: 100%;
 }
-
+.gap_up {
+    height: 5px;
+    width: 100%;
+}
+.gap_below {
+    height: 32px;
+    width: 100%;
+}
 .outtersection form {
     margin: 25px;
     width: 80%;
+}
+
+svg text {
+    font-size: 11px;
+    word-wrap: break-word !important;
 }
 
 .outtersection {
@@ -13,7 +25,16 @@
     border-radius: 5px;
     width: 100%;
 }
-
+.outtersection {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    width: 100%;
+    clear:both;
+    height:auto;
+}
+.loadContent {
+    margin-top: 15px;
+}
 .form-group p {
     font-family: inherit;
     font-size: 16px;
@@ -44,8 +65,8 @@
 }
 
 #chart {
-    margin: 0 auto;
-    width: 65%;
+    float: left;
+    width: 100%;
 }
 
 
@@ -56,7 +77,9 @@ svg {
 
 foreignObject body {
     background: #fff none repeat scroll 0 0;
-    height: 68px;
+    border-radius: 5px;
+    height: 72px;
     margin-left: 0;
-    width: 110px;
+    text-align: center;
+    width: 116px;
 }

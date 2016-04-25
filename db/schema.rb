@@ -11,14 +11,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160415054316) do
+ActiveRecord::Schema.define(version: 20160425060155) do
 
-  create_table "records", force: :cascade do |t|
+  create_table "connections", force: :cascade do |t|
+    t.string   "from"
+    t.string   "to"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "nodes", force: :cascade do |t|
     t.string   "nodeid"
     t.string   "name"
     t.string   "level"
-    t.string   "from"
-    t.string   "to"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

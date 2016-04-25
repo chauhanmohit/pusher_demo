@@ -2,27 +2,34 @@
     <div class="col-md-12">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-          <div class="gap"></div>
-          <div class="outtersection">
-            <form class="form-horizontal" method="post" role="form" action="/send">
-              <div class="form-group">
-               <p>Add graph node</p>
-              </div>
-               <div class="form-group">
-                <input type="text" class="form-control" placeholder="Node Id" id="id" name="id" required />
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control" placeholder="Name" id="name" name="name" required />
-              </div>
-              <div class="form-group">
-                <label>Level</label> :
-                <select name="level">
-                    <option value="1">Level 1</option>
-                    <option value="2">Level 2</option>
-                    <option value="3">Level 3</option>
-                    <option value="4">Level 4</option>
-                </select>
-              </div>
+            <div class="gap"></div>
+            <div class="outtersection">
+                <form class="form-horizontal" method="post" role="form" action="/send_node">
+                    <div class="form-group">
+                     <p>Add graph node</p>
+                    </div>
+                     <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Node Id" id="id" name="id" required />
+                    </div>
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="Name" id="name" name="name" required />
+                    </div>
+                    <div class="form-group">
+                      <label>Level</label> :
+                      <select name="level">
+                          <option value="1">Level 1</option>  
+                          <option value="2">Level 2</option>
+                          <option value="3">Level 3</option>
+                          <option value="4">Level 4</option>
+                      </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                    <a href="/showGraph" class="btn btn-warning">Graph</a>
+                </form>
+            </div>
+            <div class="gap"></div>
+            <div class="outtersection">
+            <form class="form-horizontal" method="post" role="form" action="/send_connections">
               <div class="form-group">
                <p>Add connections for node</p>
               </div>
