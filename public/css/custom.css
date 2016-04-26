@@ -21,17 +21,15 @@ svg text {
 }
 
 .outtersection {
-    border: 1px solid #aaa;
+    border: 1px solid #aaaaaa;
     border-radius: 5px;
+    clear: both;
+    display: inline-block;
+    height: auto;
+    padding: 22px 10px;
     width: 100%;
 }
-.outtersection {
-    border: 1px solid #aaa;
-    border-radius: 5px;
-    width: 100%;
-    clear:both;
-    height:auto;
-}
+
 .loadContent {
     margin-top: 15px;
 }

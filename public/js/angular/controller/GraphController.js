@@ -5,14 +5,12 @@
     controllerMethod.$inject = ['$http','$scope','toastr','_'];
     
     function controllerMethod($http, $scope, toastr,_) {
-        $scope.loadedContent = [];
-        
         $scope.serverData = [] ;
         
         $http.get('js/data/data.json')
         .then(function(result){
             $scope.serverData.push(result.data);
-            $scope.loadedContent = angular.fromJson(result.data);
+            $scope.textareaData = JSON.stringify(result.data);
         },function(error){
             console.log("Error Raised", error);
         });
@@ -39,6 +37,13 @@
             }
         });
         
+        $scope.loadtextData = function(){
+            $scope.serverData = [] ;
+            setTimeout(function(){
+                $scope.serverData.push(JSON.parse($scope.textareaData));
+                $scope.$apply();
+            },2000);
+        }
     }
     
 }());

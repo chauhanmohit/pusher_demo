@@ -10,10 +10,10 @@
      <div class="gap_below"></div>
       <div class="outtersection">
         <div class="col-md-12">
-          <textarea rows="8" cols="30" class="loadContent"> {{ loadedContent }} </textarea>
-        </div>
-        <div class="col-md-12"><br/>
-          <button class="btn btn-warning">Load graph</button>
+          <textarea rows="8" cols="30" class="loadContent" ng-model="textareaData"></textarea>
+          <div class="col-md-12"><br/>
+          <button class="btn btn-warning" ng-click="loadtextData()">Load graph</button>
+          <a href="/" class="btn btn-primary">Add Node</a>
         </div>
         <div class="gap_below"></div>
         <div class="col-md-12">
@@ -37,15 +37,15 @@
 <script type="text/javascript">
   (function($){
     $(document).ready(function(){
-      
       $('#changeName').click(function(){
         var id = $('#id').val();
         var name = $('#name').val();
-        var element = $('.text_name_'+id + ' > body')
+        console.log("id, name", id, name);
+        var element = $('.text_name_'+id )
         if (element !== undefined) {
-          var element = $('.text_name_'+id + ' > body').text(name);
-          id.val('');
-          name.val('');
+          var element = $('.text_name_'+id ).text(name);
+          $('#id').val('');
+          $('#name').val('');
         }else{
           alert("error occured");
         }

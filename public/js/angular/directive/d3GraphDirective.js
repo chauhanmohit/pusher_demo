@@ -21,13 +21,55 @@
                         
                         //Make an SVG Container
                         var svgContainer = d3.select('#chart').append("svg")
-                                            .classed("svg-container", true)
-                                            .attr("preserveAspectRatio", "xMinYMin meet")
-                                            .attr("viewBox", "-12 1 795 394")
-                                            .attr("viewBox", "0 0 795 394")
-                                            .classed("svg-content-responsive", true)
-                                            .append("g");
-
+                                .classed("svg-container", true)
+                                .attr("preserveAspectRatio", "xMinYMin meet")
+                                .attr("viewBox", "-12 1 795 394")
+                                .attr("viewBox", "0 0 795 394")
+                                .classed("svg-content-responsive", true)
+                                .append("g");
+                                            
+                        // capture drag event
+                        var drag = d3.behavior.drag()
+                                    .on('drag', function() {
+                                        var type =  d3.select(this).attr('type') ;
+                                        switch (type) {
+                                            case 'node':
+                                                d3.select(this)
+                                                    .attr("x", d3.event.x)
+                                                    .attr("y", d3.event.y);
+                                                break;
+                                            case 'text':
+                                                d3.select(this)
+                                                    .attr("x", d3.event.x)
+                                                    .attr("y", d3.event.y);
+                                                break;
+                                            case 'circle':
+                                                d3.select(this)
+                                                    .attr("cx", d3.event.x)
+                                                    .attr("cy", d3.event.y);
+                                                break;
+                                            default:
+                                        }
+                                        
+                                    })
+                                    .on('dragend', function() {
+                                        var type = d3.select(this).attr('type') ;
+                                        var parent = this.parentNode 
+                                        switch (type) {
+                                            case 'node':
+                                                console.log("node is draged to parent" , parent );
+                                                d3.selectAll("svg line").remove();
+                                                createConnections();
+                                                break;
+                                            case 'text':
+                                                console.log("text is draged to parent", parent);
+                                                break;
+                                            default:
+                                        }
+                                        console.log("this", d3.select(this).node().parentNode);
+                                    });
+                                    
+                        
                         data.forEach(function(d,i){
                             nodes = _.chain(d.Components)
                                 .groupBy("Level")
@@ -80,7 +122,7 @@
                                         });
                                 }
                                 
-                                //appending child nodes      
+                                //appending nodes      
                                 _.map(d.children,function(value,index){
                                     svgContainer.append("rect")
                                         .attr("x", 10 + (3*i*70))
@@ -88,61 +130,75 @@
                                         .attr("rx",5)
                                         .attr("ry",5)
                                         .attr("id", value.ID)
+                                        .attr("type","node")
                                         .attr("width", rwidth)
                                         .attr("height", rheight)
                                         .style("stroke", "#000")
-                                        .style("fill", "none")
+                                        .style("fill","none")
+                                        .attr("cursor", "move")
+                                        .call(drag)
                                         .style("stroke-width", 2);
                 
                                     //appending names in the rectangle of child nodes
-                                    svgContainer.append('foreignObject')
-                                            .attr('x', 12 + (3*i*70))
-                                            .attr('y', 12 + parseInt( (150*(index))/1.5 ) )
-                                            .attr('class', "text_name_"+value.ID)
-                                            .attr('width', parseInt(rwidth) )
-                                            .attr('height', parseInt(rheight) )
-                                            .append("xhtml:body")
-                                            .html(value.Name);
+                                    svgContainer.append('text')
+                                        .attr('x', 12 + (3*i*70)+ 10 )
+                                        .attr('y', 12 + parseInt( (150*(index))/1.5 ) + 35)
+                                        .attr('class', "text_name_"+value.ID)
+                                        .attr('type','text')
+                                        .attr('width', parseInt(rwidth) )
+                                        .attr('height', parseInt(rheight) )
+                                        .text(value.Name)
+                                        .attr('cursor', 'move')
+                                        .call(drag);
                                             
                                     //appending circles to the child node at the start of rectangle
                                     svgContainer.append("circle")
                                         .attr("cx", 10 + (3*i*70))
                                         .attr("cy", 10 + parseInt( (150*(index ))/1.5 ) + 37 )
+                                        .attr("type", "circle")
                                         .attr("r",4)
-                                        .style("fill","#3c753b");
+                                        .style("fill","#3c753b")
+                                        .attr('cursor', 'move')
+                                        .call(drag);
                 
                                     //appending circles to the child node at the end of rectangle
                                     svgContainer.append("circle")
                                         .attr("cx", 10 + (3*i*70) + rwidth )
                                         .attr("cy", 10 + parseInt( (150*(index ))/1.5 ) + 37 )
+                                        .attr("type", "circle")
                                         .attr("r",4)
-                                        .style("fill","#3c753b");
+                                        .style("fill","#3c753b")
+                                        .attr('cursor', 'move')
+                                        .call(drag);;
                                 });
                         });
                         
-                        var k = 0 ;
-                        _.map(connections,function(conn, i){
-                            k = parseInt(i + 1 ) ;
-                            if (conn.link.length) {
-                                if (k == parseInt(conn.Level) ) {
-                                    _.map(conn.link, function(linklist, list){
-                                        var positionx1 = document.getElementById(linklist.from).getAttribute('x') ;
-                                        var positiony1 = document.getElementById(linklist.from).getAttribute('y') ;
-                                        var positionx2 = document.getElementById(linklist.to).getAttribute('x') ;
-                                        var positiony2 = document.getElementById(linklist.to).getAttribute('y') ;
-                                        svgContainer.append("line")
-                                        .attr("class", "link")
-                                        .attr({
-                                            //x1: parseInt( positionx1 ), y1: parseInt( positiony1 ), //start of the line
-                                            //x2: parseInt( positionx2 ), y2: parseInt( positiony2 ) //end of the line
-                                            x1: calculatePostionX1( positionx1 , conn.Level, linklist.child), y1: calculatePositionY1( positiony1 , conn.Level, linklist.child), //start of the line
-                                            x2: calculatePositionX2( positionx2 , conn.Level , linklist.child), y2: calculatePositionY2( positiony2 , conn.Level, linklist.child) //end of the line
-                                        }); 
-                                    });
+                        function createConnections() {
+                            var k = 0 ;
+                            _.map(connections,function(conn, i){
+                                k = parseInt(i + 1 ) ;
+                                if (conn.link.length) {
+                                    if (k == parseInt(conn.Level) ) {
+                                        _.map(conn.link, function(linklist, list){
+                                            var positionx1 = document.getElementById(linklist.from).getAttribute('x') ;
+                                            var positiony1 = document.getElementById(linklist.from).getAttribute('y') ;
+                                            var positionx2 = document.getElementById(linklist.to).getAttribute('x') ;
+                                            var positiony2 = document.getElementById(linklist.to).getAttribute('y') ;
+                                            svgContainer.append("line")
+                                            .attr("class", "link line_"+linklist.from+"_"+linklist.to)
+                                            .attr('x1Node', linklist.from)
+                                            .attr('x2Node', linklist.to)
+                                            .attr({
+                                                x1: calculatePostionX1( positionx1 , conn.Level, linklist.child), y1: calculatePositionY1( positiony1 , conn.Level, linklist.child), //start of the line
+                                                x2: calculatePositionX2( positionx2 , conn.Level , linklist.child), y2: calculatePositionY2( positiony2 , conn.Level, linklist.child) //end of the line
+                                            }); 
+                                        });
+                                    }
                                 }
-                            }
-                        });
+                            });
+                        }
                         
+                        createConnections();
                         function calculatePostionX1(x , level, childCount) {
                             switch ( parseInt(level) ) {
                                 case 1 :
@@ -219,6 +275,12 @@
                     });
                     
                     scope.$watchCollection('data[0].Connections', function(n,o){
+                        if (n) {
+                            scope.render(scope.data);    
+                        }
+                    });
+                    
+                    scope.$watchCollection('data',function(n,o){
                         if (n) {
                             scope.render(scope.data);    
                         }
