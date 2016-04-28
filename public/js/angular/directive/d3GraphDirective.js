@@ -57,7 +57,7 @@
                                         var parent = this.parentNode 
                                         switch (type) {
                                             case 'node':
-                                                console.log("node is draged to parent" , parent );
+                                                console.log("this", this);
                                                 d3.selectAll("svg line").remove();
                                                 createConnections();
                                                 break;
@@ -81,13 +81,12 @@
                                 
                             //creating the links between nodes
                             _.map(nodes,function(l,i){
-                                l.Id = l.children[0].ID ;
+                                l.Id = l.children[0].ID ; 
                                 _.map(l.children,function(c,child){
                                     _.map(d.Connections,function(r,conn){
                                         if (c.ID === r.From) {
                                             c.from = r.From ;
                                             c.to = r.To
-                                        
                                             links.push({
                                                 "from": r.From,
                                                 "to": r.To ,
@@ -131,6 +130,7 @@
                                         .attr("ry",5)
                                         .attr("id", value.ID)
                                         .attr("type","node")
+                                        .attr("level", d.Level)
                                         .attr("width", rwidth)
                                         .attr("height", rheight)
                                         .style("stroke", "#000")
@@ -185,7 +185,7 @@
                                             var positionx2 = document.getElementById(linklist.to).getAttribute('x') ;
                                             var positiony2 = document.getElementById(linklist.to).getAttribute('y') ;
                                             svgContainer.append("line")
-                                            .attr("class", "link line_"+linklist.from+"_"+linklist.to)
+                                            .attr("class", "link")
                                             .attr('x1Node', linklist.from)
                                             .attr('x2Node', linklist.to)
                                             .attr({

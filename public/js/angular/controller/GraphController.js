@@ -44,6 +44,37 @@
                 $scope.$apply();
             },2000);
         }
+        
+        $scope.changeText = function() {
+            var id = $scope.id, name = $scope.name, element = $('.text_name_'+id );
+            $scope.text = {};
+            if (element !== undefined) {
+                var element = $('.text_name_'+id ).text(name);
+                $scope.id = '';
+                $scope.name = '';
+                _.map(JSON.parse($scope.textareaData) , function(value, key){
+                    console.log("value",value,key);
+                    if (key == 'Components') {
+                        _.map(value, function(components, index){
+                            if (id == components.ID) {
+                                components.Name = name ;
+                            }
+                        });
+                    }
+                    if (key == "Components") {
+                        $scope.text.Components = value ;
+                    }else{
+                        $scope.text.Connections = value ;
+                    }
+                });
+                $scope.textareaData = JSON.stringify($scope.text) ;
+                if (!$scope.$$phase) {
+                    $scope.$digest();
+                }
+            }else{
+              alert("error occured");
+            }
+        }
     }
     
 }());

@@ -7,7 +7,7 @@
   <div class="col-lg-3">
     <div class="gap_up"></div>
     <center><h1>Configuration</h1></center>
-     <div class="gap_below"></div>
+      <div class="gap_below"></div>
       <div class="outtersection">
         <div class="col-md-12">
           <textarea rows="8" cols="30" class="loadContent" ng-model="textareaData"></textarea>
@@ -22,35 +22,32 @@
               <p>Change node name</p>
             </div>
              <div class="form-group">
-              <input type="text" class="form-control" placeholder="Node Id" id="id" required />
+              <input type="text" class="form-control" placeholder="Node Id" id="id" ng-model="id" required />
             </div>
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Name" id="name" required />
+              <input type="text" class="form-control" placeholder="Name" id="name" ng-model="name" required />
             </div>
-            <button type="button" class="btn btn-primary" id="changeName">Change</button>
+            <button type="button" class="btn btn-primary" id="changeName" ng-click="changeText()">Change</button>
         </div>
       </div>
   </div>
-  
 </div>
-
 <script type="text/javascript">
-  (function($){
-    $(document).ready(function(){
-      $('#changeName').click(function(){
-        var id = $('#id').val();
-        var name = $('#name').val();
-        console.log("id, name", id, name);
-        var element = $('.text_name_'+id )
-        if (element !== undefined) {
-          var element = $('.text_name_'+id ).text(name);
-          $('#id').val('');
-          $('#name').val('');
-        }else{
-          alert("error occured");
-        }
-        console.log("elemt", element);
-      });
-    });
-  }($));
+  //(function($){
+  //  $(document).ready(function(){
+  //    $('#changeName').click(function(){
+  //      var id = $('#id').val();
+  //      var name = $('#name').val();
+  //      var element = $('.text_name_'+id )
+  //      if (element !== undefined) {
+  //        var element = $('.text_name_'+id ).text(name);
+  //        $('#id').val('');
+  //        $('#name').val('');
+  //      }else{
+  //        alert("error occured");
+  //      }
+  //      console.log("elemt", element);
+  //    });
+  //  });
+  //}($));
 </script>
