@@ -37,6 +37,7 @@
                                                 d3.select(this)
                                                     .attr("x", d3.event.x)
                                                     .attr("y", d3.event.y);
+                                                //console.log("x,y", d3.event.x , d3.event.y);
                                                 break;
                                             case 'text':
                                                 d3.select(this)
@@ -54,11 +55,12 @@
                                     })
                                     .on('dragend', function() {
                                         var type = d3.select(this).attr('type') ;
-                                        var parent = this.parentNode 
+                                        var level = d3.select(this).attr('level');
+                                        var x = d3.select(this).attr('x');
+                                        var y = d3.select(this).attr('y');
                                         switch (type) {
                                             case 'node':
-                                                console.log("this", this);
-                                                d3.selectAll("svg line").remove();
+                                                d3.selectAll("svg .connectionLine").remove();
                                                 createConnections();
                                                 break;
                                             case 'text':
@@ -66,7 +68,20 @@
                                                 break;
                                             default:
                                         }
-                                        console.log("this", d3.select(this).node().parentNode);
+                                        var changeData = {}; 
+                                        if(x < 130){
+                                            changeData.Level = 1;
+                                        }else if (x < 320 && x > 130) {
+                                            changeData.Level = 2;
+                                        }else if (x > 320 && x < 510) {
+                                            changeData.Level = 3;
+                                        }else if(x > 510 && x < 730){
+                                            changeData.Level = 4;
+                                        }else {
+                                            changeData.Level = 'out of level';
+                                        }
+                                        changeData.Id = d3.select(this).attr('id')
+                                        scope.$emit('level', changeData);
                                     });
                                     
                         
@@ -115,6 +130,7 @@
                                 if(k <= parseInt(nodes.length -1) ){                
                                     svgContainer.append("line")
                                         .attr("stroke", "black")
+                                        .attr("class","topLevelLine")
                                         .attr({
                                             x1: parseInt( (rwidth + 70)*k ), y1: parseInt(rheight + 345), //start of the line
                                             x2: parseInt(  (rwidth + 70)*k ), y2: 0 //end of the line
@@ -185,7 +201,7 @@
                                             var positionx2 = document.getElementById(linklist.to).getAttribute('x') ;
                                             var positiony2 = document.getElementById(linklist.to).getAttribute('y') ;
                                             svgContainer.append("line")
-                                            .attr("class", "link")
+                                            .attr("class", "connectionLine")
                                             .attr('x1Node', linklist.from)
                                             .attr('x2Node', linklist.to)
                                             .attr({

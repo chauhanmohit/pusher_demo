@@ -53,7 +53,6 @@
                 $scope.id = '';
                 $scope.name = '';
                 _.map(JSON.parse($scope.textareaData) , function(value, key){
-                    console.log("value",value,key);
                     if (key == 'Components') {
                         _.map(value, function(components, index){
                             if (id == components.ID) {
@@ -75,6 +74,28 @@
               alert("error occured");
             }
         }
+        
+        $scope.$on('level', function(event, data){
+            $scope.text = {};
+            _.map(JSON.parse($scope.textareaData) , function(value, key){
+                if (key == 'Components') {
+                    _.map(value, function(components, index){
+                        if (data.Id == components.ID) {
+                            components.Level = data.Level ;
+                        }
+                    });
+                }
+                if (key == "Components") {
+                    $scope.text.Components = value ;
+                }else{
+                    $scope.text.Connections = value ;
+                }
+            });
+                $scope.textareaData = JSON.stringify($scope.text) ;
+                if (!$scope.$$phase) {
+                    $scope.$digest();
+                }
+        });
     }
     
 }());

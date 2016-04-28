@@ -56,7 +56,7 @@ svg text {
     top: 10px;
     left: 0;
 }
-.link {
+.connectionLine {
     fill: none;
     stroke: #3c753b;
     stroke-width: 1.5px;
