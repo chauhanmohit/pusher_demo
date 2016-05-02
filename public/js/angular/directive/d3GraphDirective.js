@@ -37,7 +37,6 @@
                                                 d3.select(this)
                                                     .attr("x", d3.event.x)
                                                     .attr("y", d3.event.y);
-                                                //console.log("x,y", d3.event.x , d3.event.y);
                                                 break;
                                             case 'text':
                                                 d3.select(this)
@@ -56,17 +55,25 @@
                                     .on('dragend', function() {
                                         var type = d3.select(this).attr('type') ;
                                         var level = d3.select(this).attr('level');
+                                        var id = d3.select(this).attr('id');
                                         var x = d3.select(this).attr('x');
                                         var y = d3.select(this).attr('y');
+                                         // get collectively text and circle class and info
+                                        var text_element = d3.selectAll('text').filter('.text_name_'+id);
+                                        var collectiveData = {
+                                            "ID" : id,
+                                            "Name" : text_element.text()
+                                        }
                                         switch (type) {
                                             case 'node':
                                                 d3.selectAll("svg .connectionLine").remove();
+                                                d3.selectAll('text').filter('.text_name_'+id).remove();
+                                                d3.selectAll('circle').filter('.circle_'+id).remove();
                                                 createConnections();
-                                                break;
-                                            case 'text':
-                                                console.log("text is draged to parent", parent);
+                                                createDataCircle(x, y, collectiveData);
                                                 break;
                                             default:
+                                            break;
                                         }
                                         var changeData = {}; 
                                         if(x < 130){
@@ -154,7 +161,7 @@
                                         .attr("cursor", "move")
                                         .call(drag)
                                         .style("stroke-width", 2);
-                
+                                    
                                     //appending names in the rectangle of child nodes
                                     svgContainer.append('text')
                                         .attr('x', 12 + (3*i*70)+ 10 )
@@ -164,29 +171,31 @@
                                         .attr('width', parseInt(rwidth) )
                                         .attr('height', parseInt(rheight) )
                                         .text(value.Name)
-                                        .attr('cursor', 'move')
-                                        .call(drag);
+                                        .attr('cursor', 'move');
+                                        //.call(drag);
                                             
                                     //appending circles to the child node at the start of rectangle
                                     svgContainer.append("circle")
                                         .attr("cx", 10 + (3*i*70))
                                         .attr("cy", 10 + parseInt( (150*(index ))/1.5 ) + 37 )
                                         .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
                                         .attr("r",4)
                                         .style("fill","#3c753b")
-                                        .attr('cursor', 'move')
-                                        .call(drag);
+                                        .attr('cursor', 'move');
+                                        //.call(drag);
                 
                                     //appending circles to the child node at the end of rectangle
                                     svgContainer.append("circle")
                                         .attr("cx", 10 + (3*i*70) + rwidth )
                                         .attr("cy", 10 + parseInt( (150*(index ))/1.5 ) + 37 )
                                         .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
                                         .attr("r",4)
                                         .style("fill","#3c753b")
-                                        .attr('cursor', 'move')
-                                        .call(drag);;
-                                });
+                                        .attr('cursor', 'move');
+                                        //.call(drag);
+                                        });
                         });
                         
                         function createConnections() {
@@ -212,6 +221,37 @@
                                     }
                                 }
                             });
+                        }
+                        
+                        function createDataCircle(x,y,data) {
+                            console.log("x,y,data", x,y, data);
+                            //appending names in the rectangle of child nodes
+                            svgContainer.append('text')
+                                .attr('x', parseFloat(x) + 15 )
+                                .attr('y', parseFloat(y) + 35)
+                                .attr('class', "text_name_"+data.ID)
+                                .attr('type','text')
+                                .attr('width', parseInt(rwidth) )
+                                .attr('height', parseInt(rheight) )
+                                .text(data.Name);
+                                
+                            //appending circles to the child node at the start of rectangle
+                            svgContainer.append("circle")
+                                .attr("cx", x)
+                                .attr("cy", parseFloat(y) + 35)
+                                .attr("type", "circle")
+                                .attr("class","circle_"+data.ID)
+                                .attr("r",4)
+                                .style("fill","#3c753b");
+        
+                            //appending circles to the child node at the end of rectangle
+                            svgContainer.append("circle")
+                                .attr("cx", parseFloat(parseFloat(x) + 120))
+                                .attr("cy", parseFloat(y) + 37)
+                                .attr("type", "circle")
+                                .attr("class","circle_"+data.ID)
+                                .attr("r",4)
+                                .style("fill","#3c753b");
                         }
                         
                         createConnections();
