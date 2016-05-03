@@ -70,48 +70,54 @@
                                         }else {
                                             changeData.Level = 'out of level';
                                         }
-                                        changeData.Id = d3.select(this).attr('id')
+                                        changeData.Id = d3.select(this).attr('id');
+                                        
                                         scope.$emit('level', changeData);
                                     });
                                     
-                        
-                        data.forEach(function(d,i){
-                            nodes = _.chain(d.Components)
-                                .groupBy("Level")
-                                .pairs()
-                                .map(function (currentItem) {
-                                    return _.object(_.zip(["Level", "children"], currentItem));
-                                })
-                                .value();
-                                
-                            //creating the links between nodes
-                            _.map(nodes,function(l,i){
-                                l.Id = l.children[0].ID ; 
-                                _.map(l.children,function(c,child){
-                                    _.map(d.Connections,function(r,conn){
-                                        if (c.ID === r.From) {
-                                            c.from = r.From ;
-                                            c.to = r.To
-                                            links.push({
-                                                "from": r.From,
-                                                "to": r.To ,
-                                                "level" : parseInt(l.Level) ,
-                                                "child" : l.children.length
-                                            }); 
-                                        }
+                        try {
+                            data.forEach(function(d,i){
+                                nodes = _.chain(d.Components)
+                                    .groupBy("Level")
+                                    .pairs()
+                                    .map(function (currentItem) {
+                                        return _.object(_.zip(["Level", "children"], currentItem));
+                                    })
+                                    .value();
+                                    
+                                //creating the links between nodes
+                                _.map(nodes,function(l,i){
+                                    l.Id = l.children[0].ID ; 
+                                    _.map(l.children,function(c,child){
+                                        _.map(d.Connections,function(r,conn){
+                                            if (c.ID === r.From) {
+                                                c.from = r.From ;
+                                                c.to = r.To
+                                                links.push({
+                                                    "from": r.From,
+                                                    "to": r.To ,
+                                                    "level" : parseInt(l.Level) ,
+                                                    "child" : l.children.length
+                                                }); 
+                                            }
+                                        });
                                     });
                                 });
+                                
+                                //console.log("links", links);
+                                connections = _.chain(links)
+                                    .groupBy("level")
+                                    .pairs()
+                                    .map(function (currentItem) {
+                                        return _.object(_.zip(["Level", "link"], currentItem));
+                                    })
+                                    .value();
                             });
-                            
-                            //console.log("links", links);
-                            connections = _.chain(links)
-                                .groupBy("level")
-                                .pairs()
-                                .map(function (currentItem) {
-                                    return _.object(_.zip(["Level", "link"], currentItem));
-                                })
-                                .value();
-                        });
+                        } catch(e) {
+                            alert("Sorry for inconvience Exception raised while creating graph.");
+                            return false ;
+                        }
+                        
                         
                         nodes.forEach(function(d,i){
                             var rootName = d.children[0].Name ? d.children[0].Name : 'Not defined';
@@ -313,7 +319,7 @@
                     });
                     
                     scope.$watchCollection('data',function(n,o){
-                        if (n) {
+                        if (n !== o) {
                             scope.render(scope.data);    
                         }
                     });

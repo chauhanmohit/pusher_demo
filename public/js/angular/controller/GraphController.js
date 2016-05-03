@@ -10,7 +10,7 @@
         $http.get('js/data/data.json')
         .then(function(result){
             $scope.serverData.push(result.data);
-            $scope.textareaData = JSON.stringify(result.data);
+            $scope.textareaData = JSON.stringify([result.data]);
         },function(error){
             console.log("Error Raised", error);
         });
@@ -35,14 +35,15 @@
                     "To" : parseInt(data.connectionTo)
                 });
             }
+            $scope.textareaData = JSON.stringify($scope.serverData);
         });
         
         $scope.loadtextData = function(){
             $scope.serverData = [] ;
-            setTimeout(function(){
-                $scope.serverData.push(JSON.parse($scope.textareaData));
-                $scope.$apply();
-            },2000);
+            $scope.serverData.push(JSON.parse($scope.textareaData)[0]);
+            if (!$scope.$$phase) {
+               $scope.$digest();
+            }
         }
         
         $scope.changeText = function() {
@@ -52,23 +53,44 @@
                 var element = $('.text_name_'+id ).text(name);
                 $scope.id = '';
                 $scope.name = '';
-                _.map(JSON.parse($scope.textareaData) , function(value, key){
-                    if (key == 'Components') {
-                        _.map(value, function(components, index){
-                            if (id == components.ID) {
-                                components.Name = name ;
-                            }
-                        });
+                 if (JSON.parse($scope.textareaData)[0]) {
+                    _.map(JSON.parse($scope.textareaData)[0] , function(value, key){
+                        if (key == 'Components') {
+                            _.map(value, function(components, index){
+                                if (id == components.ID) {
+                                    components.Name = name ;
+                                }
+                            });
+                        }
+                        if (key == "Components") {
+                            $scope.text.Components = value ;
+                        }else{
+                            $scope.text.Connections = value ;
+                        }
+                    });
+                    $scope.textareaData = JSON.stringify([$scope.text]) ;
+                    if (!$scope.$$phase) {
+                        $scope.$digest();
                     }
-                    if (key == "Components") {
-                        $scope.text.Components = value ;
-                    }else{
-                        $scope.text.Connections = value ;
+                }else{
+                    _.map(JSON.parse([$scope.textareaData]) , function(value, key){
+                        if (key == 'Components') {
+                            _.map(value, function(components, index){
+                                if (id == components.ID) {
+                                    components.Name = name ;
+                                }
+                            });
+                        }
+                        if (key == "Components") {
+                            $scope.text.Components = value ;
+                        }else{
+                            $scope.text.Connections = value ;
+                        }
+                    });
+                    $scope.textareaData = JSON.stringify([$scope.text]) ;
+                    if (!$scope.$$phase) {
+                        $scope.$digest();
                     }
-                });
-                $scope.textareaData = JSON.stringify($scope.text) ;
-                if (!$scope.$$phase) {
-                    $scope.$digest();
                 }
             }else{
               alert("error occured");
@@ -77,24 +99,47 @@
         
         $scope.$on('level', function(event, data){
             $scope.text = {};
-            _.map(JSON.parse($scope.textareaData) , function(value, key){
-                if (key == 'Components') {
-                    _.map(value, function(components, index){
-                        if (data.Id == components.ID) {
-                            components.Level = data.Level ;
-                        }
-                    });
-                }
-                if (key == "Components") {
-                    $scope.text.Components = value ;
-                }else{
-                    $scope.text.Connections = value ;
-                }
-            });
-                $scope.textareaData = JSON.stringify($scope.text) ;
+            
+            if (JSON.parse($scope.textareaData)[0]) {
+                _.map(JSON.parse($scope.textareaData)[0] , function(value, key){
+                    if (key == 'Components') {
+                        _.map(value, function(components, index){
+                            if (data.Id == components.ID) {
+                                components.Level = data.Level ;
+                            }
+                        });
+                        $scope.text.Components = value ;
+                    }else{
+                        $scope.text.Connections = value ;
+                    }
+                });
+                
+                $scope.textareaData = JSON.stringify([$scope.text]) ;
                 if (!$scope.$$phase) {
                     $scope.$digest();
                 }
+
+            }else{
+                _.map(JSON.parse([$scope.textareaData]) , function(value, key){
+                    if (key == 'Components') {
+                        _.map(value, function(components, index){
+                            if (data.Id == components.ID) {
+                                components.Level = data.Level ;
+                            }
+                        });
+                        $scope.text.Components = value ;
+                    }else{
+                        $scope.text.Connections = value ;
+                    }
+                });
+                
+                $scope.textareaData = JSON.stringify([$scope.text]) ;
+                if (!$scope.$$phase) {
+                    $scope.$digest();
+                }
+            }
+            
+            
         });
     }
     
