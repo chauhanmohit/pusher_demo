@@ -13,9 +13,9 @@ Things you may want to cover:
 
 * run the "rackup" command
 
-* This will launch the Ruby sinatra app at port number 9292
+* The above command will launch the Ruby sinatra app at port number 9292
 
-* The open http://localhost:9292 in any of desired 
+* Then open http://localhost:9292 in any of desired 
 
 ......
 
@@ -36,7 +36,7 @@ Things you may want to cover:
 * After submit the Form Immedietly change the tab to a url http://localhost:9292/showGraph see the effect
 
 * For better understanding see the following video.
-    Url:- https://www.dropbox.com/s/6x4j854gmgoh10n/dynamicGraph.mp4?dl=0
+    Url:- https://www.dropbox.com/s/4kyziboiboloaot/newSystemGraph.webm?dl=0
     
 # Technologies used 
 

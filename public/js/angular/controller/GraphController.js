@@ -93,7 +93,7 @@
                     }
                 }
             }else{
-              alert("error occured");
+              alert("error occured");              
             }
         }
         
@@ -138,9 +138,6 @@
                     $scope.$digest();
                 }
             }
-            
-            
         });
     }
-    
 }());

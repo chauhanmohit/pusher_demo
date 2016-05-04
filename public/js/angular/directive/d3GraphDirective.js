@@ -2,9 +2,7 @@
     'use strict';
     
     app.directive('systemGraph',directiveMethod);
-    
     directiveMethod.$inject = ['$http','_','d3Service'];
-        
     function directiveMethod($http,_,d3Service) {
         return {
             restrict: 'E',
@@ -30,50 +28,51 @@
                                             
                         // capture drag event
                         var drag = d3.behavior.drag()
-                                    .on('drag', function() {
-                                        var type =  d3.select(this).attr('type') ;
-                                        if (type == 'node') {
-                                            d3.select(this)
-                                                .attr("x", d3.event.x)
-                                                .attr("y", d3.event.y);
-                                        }
-                                    })
-                                    .on('dragend', function() {
-                                        var type = d3.select(this).attr('type') ;
-                                        var level = d3.select(this).attr('level');
-                                        var id = d3.select(this).attr('id');
-                                        var x = d3.select(this).attr('x');
-                                        var y = d3.select(this).attr('y');
-                                         // get collectively text and circle class and info
-                                        var text_element = d3.selectAll('text').filter('.text_name_'+id);
-                                        var collectiveData = {
-                                            "ID" : id,
-                                            "Name" : text_element.text()
-                                        }
-                                        if (type == 'node') {
-                                            d3.selectAll("svg .connectionLine").remove();
-                                            d3.selectAll('text').filter('.text_name_'+id).remove();
-                                            d3.selectAll('circle').filter('.circle_'+id).remove();
-                                            createConnections();
-                                            createDataCircle(x, y, collectiveData);
-                                        }
-                                        
-                                        var changeData = {}; 
-                                        if(x < 130){
-                                            changeData.Level = 1;
-                                        }else if (x < 320 && x > 130) {
-                                            changeData.Level = 2;
-                                        }else if (x > 320 && x < 510) {
-                                            changeData.Level = 3;
-                                        }else if(x > 510 && x < 730){
-                                            changeData.Level = 4;
-                                        }else {
-                                            changeData.Level = 'out of level';
-                                        }
-                                        changeData.Id = d3.select(this).attr('id');
-                                        
-                                        scope.$emit('level', changeData);
-                                    });
+                            .on('drag', function() {
+                                var type =  d3.select(this).attr('type') ;
+                                if (type == 'node') {
+                                    d3.select(this)
+                                        .attr("x", d3.event.x)
+                                        .attr("y", d3.event.y);
+                                }
+                            })
+                            .on('dragend', function() {
+                                var type = d3.select(this).attr('type') ;
+                                var level = d3.select(this).attr('level');
+                                var id = d3.select(this).attr('id');
+                                var x = d3.select(this).attr('x');
+                                var y = d3.select(this).attr('y');
+                   
+                                 // get collectively text and circle class and info
+                                var text_element = d3.selectAll('text').filter('.text_name_'+id);
+                                var collectiveData = {
+                                    "ID" : id,
+                                    "Name" : text_element.text()
+                                }
+                                if (type == 'node') {
+                                    d3.selectAll("svg .connectionLine").remove();
+                                    d3.selectAll('text').filter('.text_name_'+id).remove();
+                                    d3.selectAll('circle').filter('.circle_'+id).remove();
+                                    createConnections();
+                                    createDataCircle(x, y, collectiveData);
+                                }
+                                
+                                var changeData = {}; 
+                                if(x < 130){
+                                    changeData.Level = 1;
+                                }else if (x < 320 && x > 130) {
+                                    changeData.Level = 2;
+                                }else if (x > 320 && x < 510) {
+                                    changeData.Level = 3;
+                                }else if(x > 510 && x < 730){
+                                    changeData.Level = 4;
+                                }else {
+                                    changeData.Level = 'out of level';
+                                }
+                                changeData.Id = d3.select(this).attr('id');
+                                
+                                scope.$emit('level', changeData);
+                            });
                                     
                         try {
                             data.forEach(function(d,i){
@@ -96,7 +95,7 @@
                                                 links.push({
                                                     "from": r.From,
                                                     "to": r.To ,
-                                                    "level" : parseInt(l.Level) ,
+                                                    "level" : l.Level ,
                                                     "child" : l.children.length
                                                 }); 
                                             }
@@ -186,8 +185,9 @@
                             _.map(connections,function(conn, i){
                                 k = parseInt(i + 1 ) ;
                                 if (conn.link.length) {
-                                    if (k == parseInt(conn.Level) ) {
+                                    if (k == conn.Level ) {
                                         _.map(conn.link, function(linklist, list){
+                                            console.log("linklist", linklist);
                                             var positionx1 = document.getElementById(linklist.from).getAttribute('x') ;
                                             var positiony1 = document.getElementById(linklist.from).getAttribute('y') ;
                                             var positionx2 = document.getElementById(linklist.to).getAttribute('x') ;
@@ -248,7 +248,7 @@
                                 case 3 :
                                     return parseInt( parseInt(x) + parseInt(rwidth) );
                                 default :
-                                    return parseInt(x) ;
+                                    return parseInt( parseInt(x) + parseInt(rwidth) );
                                 break;
                             }
                             //return x ;
@@ -266,25 +266,25 @@
                                     return parseInt(parseInt(y) + 37) ;
                                 break ;
                                 default :
-                                    return parseInt(y) ;
+                                    return parseInt(parseInt(y) + 37) ;
                                 break;
                             }
                         }
                         
                         function calculatePositionX2(x , level, childCount) {
-                                switch ( parseInt(level) ) {
-                                    case 1 :
-                                        return parseInt(x) ;
-                                    break;
-                                    case 2 :
-                                        return parseInt( x );
-                                    break;
-                                    case 3 :
-                                        return parseInt( x );
-                                    default :
-                                        return parseInt(x) ;
-                                    break;
-                                }
+                            switch ( parseInt(level) ) {
+                                case 1 :
+                                    return parseInt(x) ;
+                                break;
+                                case 2 :
+                                    return parseInt( x );
+                                break;
+                                case 3 :
+                                    return parseInt( x );
+                                default :
+                                    return parseInt(x) ;
+                                break;
+                            }
                         }
                         
                         function calculatePositionY2(y , level, childCount) {
@@ -299,7 +299,7 @@
                                     return parseInt(parseInt(y) + 37) ;
                                 break ;
                                 default :
-                                    return parseInt(y) ;
+                                    return parseInt(parseInt(y) + 37) ;
                                 break;
                             }
                         }
@@ -328,5 +328,4 @@
             }
         }
     }
-    
 }());
