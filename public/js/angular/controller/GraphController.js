@@ -106,6 +106,8 @@
                         _.map(value, function(components, index){
                             if (data.Id == components.ID) {
                                 components.Level = data.Level ;
+                                components.xAxis = data.xAxis ;
+                                components.yAxis = data.yAxis ;
                             }
                         });
                         $scope.text.Components = value ;
