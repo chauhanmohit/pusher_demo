@@ -119,113 +119,150 @@
                             return false ;
                         }
                         
-                        
                         nodes.forEach(function(d,i){
+                            
                             var rootName = d.children[0].Name ? d.children[0].Name : 'Not defined';
                             var k = parseInt(i + 1);
-                
+                    
                             if(k <= parseInt(nodes.length -1) ){                
                                 svgContainer.append("line")
                                 .attr("stroke", "black")
                                 .attr("class","topLevelLine")
                                 .attr({
-                                    x1: parseInt( (rwidth + 70)*k ), y1: parseInt(rheight + 345),                                    //start of the line
+                                    x1: parseInt( (rwidth + 70)*k ), y1: parseInt(rheight + 345), //start of the line
                                     x2: parseInt(  (rwidth + 70)*k ), y2: 0 //end of the line
                                 });
                             }
                             
-                            //appending nodes      
+                            //appending nodes
+                            console.log("d.children",d.children, k);
                             _.map(d.children,function(value,index){
-                                var x, y, textxAxis , textyAxis, circleCx1, circleCy1, circleCx2, circleCy2, circleCx3, circleCy3, circleCx4, circleCy4;
-                                if (value.xAxis && value.yAxis) {
-                                    x = value.xAxis;
-                                    y = value.yAxis;
-                                    textxAxis = parseFloat(value.xAxis) + 10;
-                                    textyAxis = parseFloat(value.yAxis) + 37 ;
-                                    circleCx1 = parseFloat(value.xAxis);
-                                    circleCy1 = parseFloat(value.yAxis) + 37 ;
-                                    circleCx2 = parseFloat(value.xAxis) + 120;
-                                    circleCy2 = parseFloat(value.yAxis) + 37;
-                                    circleCx3 = parseFloat(value.xAxis) + 60;
-                                    circleCy3 = parseFloat(value.yAxis);
-                                    circleCx4 = parseFloat(value.xAxis) + 60;
-                                    circleCy4 = parseFloat(value.yAxis) + 75;
+                                if (nodes.length === k) {
+                                    svgContainer.append("rect")
+                                        .attr("x", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) : 10 + (3*i*70) )
+                                        .attr("y", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) : parseFloat(10 + parseInt( (150*( 0 ))/1.5 )) )
+                                        .attr("rx",5)
+                                        .attr("ry",5)
+                                        .attr("id", value.ID)
+                                        .attr("type","node")
+                                        .attr("level", d.Level)
+                                        .attr("width", rwidth)
+                                        .attr("height", rheight)
+                                        .style("stroke", "#000")
+                                        .style("fill","none")
+                                        .attr("cursor", "move")
+                                        .call(drag)
+                                        .style("stroke-width", 2);
                                     
-                                }else {
-                                    x = 10 + (3*i*70);
-                                    y = 10 + parseInt( (150*(index ))/1.5 );
-                                    textxAxis = 12 + (3*i*70)+ 10;
-                                    textyAxis = 12 + parseInt( (150*(index))/1.5 ) + 35;
-                                    circleCx1 = 10 + (3*i*70);
-                                    circleCy1 = 10 + parseInt( (150*(index ))/1.5 ) + 37;
-                                    circleCx2 = 10 + (3*i*70) + rwidth;
-                                    circleCy2 = 10 + parseInt( (150*(index ))/1.5 ) + 37;
-                                    circleCx3 = (3*i*70) + rwidth - 50;
-                                    circleCy3 = 11 + parseInt( (150*(index ))/1.5 );
-                                    circleCx4 = (3*i*70) + rwidth - 50;
-                                    circleCy4 = 10 + parseInt( (150*(index ))/1.5 ) + 75;
+                                    //appending names in the rectangle of child nodes
+                                    svgContainer.append('text')
+                                        .attr('x', !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) + 10 : 12 + (3*i*70)+ 10 )
+                                        .attr('y', !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) + 37 : parseFloat(12 + parseInt( (150*( 0 ))/1.5 ) + 35) )
+                                        .attr('class', "text_name_"+value.ID)
+                                        .attr('type','text')
+                                        .attr('width', parseInt(rwidth) )
+                                        .attr('height', parseInt(rheight) )
+                                        .text(value.Name);
+                                   
+                                    //appending circles to the child node at the start of rectangle
+                                    svgContainer.append("circle")
+                                        .attr("cx", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) : 10 + (3*i*70) )
+                                        .attr("cy", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) + 37 : parseFloat(10 + parseInt( (150*( 0 ))/1.5 ) + 37) )
+                                        .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
+                                        .attr("r",4)
+                                        .style("fill","#3c753b");
+                
+                                    //appending circles to the child node at the end of rectangle
+                                    svgContainer.append("circle")
+                                        .attr("cx", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) + 120 : 10 + (3*i*70) + rwidth )
+                                        .attr("cy", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) + 37 : parseFloat(10 + parseInt( (150*( 0 ))/1.5 ) + 37) )
+                                        .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
+                                        .attr("r",4)
+                                        .style("fill","#3c753b");
+                                        
+                                    //appending circles to the child node at the top of rectangle
+                                    svgContainer.append("circle")
+                                        .attr("cx", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) + 60 : (3*i*70) + rwidth - 50 )
+                                        .attr("cy", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) : parseFloat(10 + parseInt( (150*( 0 ))/1.5 )) )
+                                        .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
+                                        .attr("r",4)
+                                        .style("fill","#3c753b");
+                                        
+                                    //appending circles to the child node at the bottom of rectangle
+                                    svgContainer.append("circle")
+                                        .attr("cx", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) + 60 : (3*i*70) + rwidth - 50 )
+                                        .attr("cy", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) + 75 : parseFloat(10 + parseInt( (150*( 0 ))/1.5 ) + 75) )
+                                        .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
+                                        .attr("r",4)
+                                        .style("fill","#3c753b");
+                                }else{
+                                    svgContainer.append("rect")
+                                        .attr("x", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) : 10 + (3*i*70) )
+                                        .attr("y", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) : parseFloat(10 + parseInt( (150*( index ))/1.5 )) )
+                                        .attr("rx",5)
+                                        .attr("ry",5)
+                                        .attr("id", value.ID)
+                                        .attr("type","node")
+                                        .attr("level", d.Level)
+                                        .attr("width", rwidth)
+                                        .attr("height", rheight)
+                                        .style("stroke", "#000")
+                                        .style("fill","none")
+                                        .attr("cursor", "move")
+                                        .call(drag)
+                                        .style("stroke-width", 2);
+                                    
+                                    //appending names in the rectangle of child nodes
+                                    svgContainer.append('text')
+                                        .attr('x', !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) + 10 : 12 + (3*i*70)+ 10 )
+                                        .attr('y', !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) + 37 : parseFloat(12 + parseInt( (150*(index))/1.5 ) + 35) )
+                                        .attr('class', "text_name_"+value.ID)
+                                        .attr('type','text')
+                                        .attr('width', parseInt(rwidth) )
+                                        .attr('height', parseInt(rheight) )
+                                        .text(value.Name);
+                                   
+                                    //appending circles to the child node at the start of rectangle
+                                    svgContainer.append("circle")
+                                        .attr("cx", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) : 10 + (3*i*70) )
+                                        .attr("cy", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) + 37 : parseFloat(10 + parseInt( (150*(index ))/1.5 ) + 37) )
+                                        .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
+                                        .attr("r",4)
+                                        .style("fill","#3c753b");
+                
+                                    //appending circles to the child node at the end of rectangle
+                                    svgContainer.append("circle")
+                                        .attr("cx", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) + 120 : 10 + (3*i*70) + rwidth )
+                                        .attr("cy", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) + 37 : parseFloat(10 + parseInt( (150*(index ))/1.5 ) + 37) )
+                                        .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
+                                        .attr("r",4)
+                                        .style("fill","#3c753b");
+                                        
+                                    //appending circles to the child node at the top of rectangle
+                                    svgContainer.append("circle")
+                                        .attr("cx", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) + 60 : (3*i*70) + rwidth - 50 )
+                                        .attr("cy", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) : parseFloat(10 + parseInt( (150*(index ))/1.5 )) )
+                                        .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
+                                        .attr("r",4)
+                                        .style("fill","#3c753b");
+                                        
+                                    //appending circles to the child node at the bottom of rectangle
+                                    svgContainer.append("circle")
+                                        .attr("cx", !_.isUndefined(value.xAxis) ? parseFloat(value.xAxis) + 60 : (3*i*70) + rwidth - 50 )
+                                        .attr("cy", !_.isUndefined(value.yAxis) ? parseFloat(value.yAxis) + 75 : parseFloat(10 + parseInt( (150*(index ))/1.5 ) + 75) )
+                                        .attr("type", "circle")
+                                        .attr("class","circle_"+value.ID)
+                                        .attr("r",4)
+                                        .style("fill","#3c753b");
                                 }
-                                svgContainer.append("rect")
-                                    .attr("x", x)
-                                    .attr("y", y)
-                                    .attr("rx",5)
-                                    .attr("ry",5)
-                                    .attr("id", value.ID)
-                                    .attr("type","node")
-                                    .attr("level", d.Level)
-                                    .attr("width", rwidth)
-                                    .attr("height", rheight)
-                                    .style("stroke", "#000")
-                                    .style("fill","none")
-                                    .attr("cursor", "move")
-                                    .call(drag)
-                                    .style("stroke-width", 2);
                                 
-                                //appending names in the rectangle of child nodes
-                                svgContainer.append('text')
-                                    .attr('x', textxAxis)
-                                    .attr('y', textyAxis)
-                                    .attr('class', "text_name_"+value.ID)
-                                    .attr('type','text')
-                                    .attr('width', parseInt(rwidth) )
-                                    .attr('height', parseInt(rheight) )
-                                    .text(value.Name);
-                               
-                                //appending circles to the child node at the start of rectangle
-                                svgContainer.append("circle")
-                                    .attr("cx", circleCx1)
-                                    .attr("cy", circleCy1)
-                                    .attr("type", "circle")
-                                    .attr("class","circle_"+value.ID)
-                                    .attr("r",4)
-                                    .style("fill","#3c753b");
-            
-                                //appending circles to the child node at the end of rectangle
-                                svgContainer.append("circle")
-                                    .attr("cx", circleCx2)
-                                    .attr("cy", circleCy2)
-                                    .attr("type", "circle")
-                                    .attr("class","circle_"+value.ID)
-                                    .attr("r",4)
-                                    .style("fill","#3c753b");
-                                    
-                                //appending circles to the child node at the top of rectangle
-                                svgContainer.append("circle")
-                                    .attr("cx", circleCx3)
-                                    .attr("cy", circleCy3)
-                                    .attr("type", "circle")
-                                    .attr("class","circle_"+value.ID)
-                                    .attr("r",4)
-                                    .style("fill","#3c753b");
-                                    
-                                //appending circles to the child node at the bottom of rectangle
-                                svgContainer.append("circle")
-                                    .attr("cx", circleCx4)
-                                    .attr("cy", circleCy4)
-                                    .attr("type", "circle")
-                                    .attr("class","circle_"+value.ID)
-                                    .attr("r",4)
-                                    .style("fill","#3c753b");
                             });
                         });
                         
@@ -380,17 +417,17 @@
                         }
                     });
                     
-                    scope.$watchCollection('data[0].Connections', function(n,o){
-                        if (n) {
-                            scope.render(scope.data);    
-                        }
-                    });
-                    
-                    scope.$watchCollection('data',function(n,o){
-                        if (n !== o) {
-                            scope.render(scope.data);    
-                        }
-                    });
+                    //scope.$watchCollection('data[0].Connections', function(n,o){
+                    //    if (n) {
+                    //        scope.render(scope.data);    
+                    //    }
+                    //});
+                    //
+                    //scope.$watchCollection('data',function(n,o){
+                    //    if (n !== o) {
+                    //        scope.render(scope.data);    
+                    //    }
+                    //});
 
                 });
             }
