@@ -135,7 +135,6 @@
                             }
                             
                             //appending nodes
-                            console.log("d.children",d.children, k);
                             _.map(d.children,function(value,index){
                                 if (nodes.length === k) {
                                     svgContainer.append("rect")
@@ -211,7 +210,7 @@
                                         .attr("width", rwidth)
                                         .attr("height", rheight)
                                         .style("stroke", "#000")
-                                        .style("fill","none")
+                                        .style("fill","#f2f2f2")
                                         .attr("cursor", "move")
                                         .call(drag)
                                         .style("stroke-width", 2);
@@ -262,7 +261,6 @@
                                         .attr("r",4)
                                         .style("fill","#3c753b");
                                 }
-                                
                             });
                         });
                         
@@ -273,18 +271,42 @@
                                 if (conn.link.length) {
                                     if (k == conn.Level ) {
                                         _.map(conn.link, function(linklist, list){
+                                            
                                             var positionx1 = document.getElementById(linklist.from).getAttribute('x') ;
                                             var positiony1 = document.getElementById(linklist.from).getAttribute('y') ;
                                             var positionx2 = document.getElementById(linklist.to).getAttribute('x') ;
                                             var positiony2 = document.getElementById(linklist.to).getAttribute('y') ;
-                                            svgContainer.append("line")
-                                            .attr("class", "connectionLine")
-                                            .attr('x1Node', linklist.from)
-                                            .attr('x2Node', linklist.to)
-                                            .attr({
-                                                x1: calculatePostionX1( positionx1 , conn.Level, linklist.child), y1: calculatePositionY1( positiony1 , conn.Level, linklist.child), //start of the line
-                                                x2: calculatePositionX2( positionx2 , conn.Level , linklist.child), y2: calculatePositionY2( positiony2 , conn.Level, linklist.child) //end of the line
-                                            }); 
+                                            
+                                            var fromLevel = document.getElementById(linklist.from).getAttribute('level');
+                                            var toLevel = document.getElementById(linklist.to).getAttribute('level');
+                                            if (parseInt(fromLevel) === parseInt(toLevel)) {
+                                                svgContainer.append("line")
+                                                .attr("class", "connectionLine")
+                                                .attr('x1Node', linklist.from)
+                                                .attr('x2Node', linklist.to)
+                                                .attr({
+                                                    x1: parseFloat(parseFloat(positionx1) + parseInt(rwidth/2)), y1: parseFloat(parseFloat(positiony1) + parseInt(rheight)), //start of the line
+                                                    x2: parseFloat( parseFloat(positionx2) + parseInt(rwidth/2) ) , y2: parseFloat( parseFloat(positiony2)) //end of the line
+                                                }); 
+                                            }else if(fromLevel > toLevel){
+                                                svgContainer.append("line")
+                                                .attr("class", "connectionLine")
+                                                .attr('x1Node', linklist.from)
+                                                .attr('x2Node', linklist.to)
+                                                .attr({
+                                                    x1: parseFloat(positionx1), y1: calculatePositionY1( positiony1 , conn.Level, linklist.child), //start of the line
+                                                    x2: parseFloat( parseFloat(positionx2) + parseInt(rwidth)), y2: calculatePositionY2( positiony2 , conn.Level, linklist.child) //end of the line
+                                                });
+                                            }else{
+                                                svgContainer.append("line")
+                                                .attr("class", "connectionLine")
+                                                .attr('x1Node', linklist.from)
+                                                .attr('x2Node', linklist.to)
+                                                .attr({
+                                                    x1: calculatePostionX1( positionx1 , conn.Level, linklist.child), y1: calculatePositionY1( positiony1 , conn.Level, linklist.child), //start of the line
+                                                    x2: calculatePositionX2( positionx2 , conn.Level , linklist.child), y2: calculatePositionY2( positiony2 , conn.Level, linklist.child) //end of the line
+                                                });
+                                            }
                                         });
                                     }
                                 }
@@ -348,15 +370,14 @@
                                     return parseInt(parseInt(x) + parseInt(rwidth) ) ;
                                 break;
                                 case 2 :
-                                    return parseInt( parseInt(x) + parseInt(rwidth) );
+                                    return parseInt(parseInt(x) + parseInt(rwidth) ) ;
                                 break;
                                 case 3 :
-                                    return parseInt( parseInt(x) + parseInt(rwidth) );
+                                    return parseInt(parseInt(x) + parseInt(rwidth) ) ;
                                 default :
-                                    return parseInt( parseInt(x) + parseInt(rwidth) );
+                                    return parseInt(parseInt(x) + parseInt(rwidth) ) ;
                                 break;
                             }
-                            //return x ;
                         }
                         
                         function calculatePositionY1( y , level, childCount) {
@@ -382,10 +403,10 @@
                                     return parseInt(x) ;
                                 break;
                                 case 2 :
-                                    return parseInt( x );
+                                    return parseInt(x) ;
                                 break;
                                 case 3 :
-                                    return parseInt( x );
+                                    return parseInt(x) ;
                                 default :
                                     return parseInt(x) ;
                                 break;
@@ -417,17 +438,17 @@
                         }
                     });
                     
-                    //scope.$watchCollection('data[0].Connections', function(n,o){
-                    //    if (n) {
-                    //        scope.render(scope.data);    
-                    //    }
-                    //});
-                    //
-                    //scope.$watchCollection('data',function(n,o){
-                    //    if (n !== o) {
-                    //        scope.render(scope.data);    
-                    //    }
-                    //});
+                    scope.$watchCollection('data[0].Connections', function(n,o){
+                        if (n) {
+                            scope.render(scope.data);    
+                        }
+                    });
+                    
+                    scope.$watchCollection('data',function(n,o){
+                        if (n !== o) {
+                            scope.render(scope.data);    
+                        }
+                    });
 
                 });
             }
